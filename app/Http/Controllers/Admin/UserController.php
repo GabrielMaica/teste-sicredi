@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Controllers\Controller;
@@ -10,14 +11,22 @@ use Illuminate\Http\Request;
 use App\Http\Middleware\CheckIfIsAdmin;
 
 
+
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::paginate(20);
-        return view ('admin.users.index', compact('users'));
-    }
+        $user = Auth::user();
 
+        if ($user->isAdm()) {
+            $users = User::paginate(20);
+        } else {
+            $authenticatedEmail = $user->email;
+            $users = User::where('email', $authenticatedEmail)->paginate(20);
+        }
+
+        return view('admin.users.index', compact('users'));
+    }
     public function create()
     {
         return view('admin.users.create');

@@ -1,7 +1,10 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<h1>Novo Usuário</h1>
+<div class="py-6">
+<h1 class="font-semibold text-xl text-gray-800">
+    Novo Usuário
+</h1>
 @if ($errors->any())
 <ul>
     @foreach ($errors->all() as $error)
